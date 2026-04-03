@@ -1,8 +1,18 @@
 // 1. INITIALIZE THE MAP (THE FOUNDATION)
 const map = L.map('map', {
-    zoomControl: false, 
-    tap: true           
-}).setView([14.5995, 120.9842], 14);
+    zoomControl: false,
+    fadeAnimation: true, // Makes tile loading look smoother
+    markerZoomAnimation: true
+}).setView([14.5995, 120.9842], 11); // Start zoomed out slightly for speed
+
+// 2. Use a faster Tile Server (Optional but helpful)
+// OpenStreetMap is great, but sometimes 'CartoDB Positron' loads faster 
+// because it has fewer colors/details to download.
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    attribution: '©OpenStreetMap ©CartoDB',
+    subdomains: 'abcd',
+    maxZoom: 19
+}).addTo(map);
 
 // 2. THE TILE LAYER (THE VISUALS) - THIS IS WHAT YOU WERE MISSING
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -32,20 +42,39 @@ socket.on('initialData', (allJeeps) => {
 });
 
 // 6. USER LOCATION LOGIC
-map.locate({ setView: true, watch: true, maxZoom: 16 });
+// Locate the user IMMEDIATELY
+map.locate({ 
+    setView: true,      // Automatically jumps the camera to the user
+    maxZoom: 16,        // High detail zoom for the "first glance"
+    watch: true,        // Keep tracking as they walk
+    enableHighAccuracy: true 
+});
 
+// This handles the "First Glance" zoom speed
 map.on('locationfound', (e) => {
     myLocation = e.latlng;
-	console.log("User location updated!");
-    document.getElementById('user-status').innerText = "Live";
     
+    // If it's the first time loading, the 'setView' above handles it.
+    // We add a subtle pulse to the user marker so they know they are the center.
     if (!window.userMarker) {
         window.userMarker = L.circleMarker(e.latlng, {
-            radius: 7, fillColor: "#64ffda", color: "white", weight: 2, fillOpacity: 1
+            radius: 8,
+            fillColor: "#64ffda",
+            color: "white",
+            weight: 3,
+            fillOpacity: 1
         }).addTo(map);
+        
+        // Force a quick flyTo for that "Professional App" feel
+        map.flyTo(e.latlng, 16, {
+            animate: true,
+            duration: 1.5 // 1.5 seconds to zoom in from Manila view to Street view
+        });
     } else {
         window.userMarker.setLatLng(e.latlng);
     }
+    
+    document.getElementById('user-status').innerText = "Live";
 });
 
 // 7. THE VEHICLE UPDATE ENGINE (Make sure this function is defined!)
