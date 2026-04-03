@@ -42,39 +42,32 @@ socket.on('initialData', (allJeeps) => {
 });
 
 // 6. USER LOCATION LOGIC
-// Locate the user IMMEDIATELY
+// Locate the user
 map.locate({ 
-    setView: true,      // Automatically jumps the camera to the user
-    maxZoom: 16,        // High detail zoom for the "first glance"
-    watch: true,        // Keep tracking as they walk
+    setView: false, // We will handle the view manually for speed
+    watch: true, 
     enableHighAccuracy: true 
 });
 
-// This handles the "First Glance" zoom speed
+let firstLoad = true;
+
 map.on('locationfound', (e) => {
     myLocation = e.latlng;
     
-    // If it's the first time loading, the 'setView' above handles it.
-    // We add a subtle pulse to the user marker so they know they are the center.
+    if (firstLoad) {
+        // Quick jump to user without fancy flying
+        map.setView(e.latlng, 16); 
+        firstLoad = false;
+    }
+
+    // Standard User Marker
     if (!window.userMarker) {
         window.userMarker = L.circleMarker(e.latlng, {
-            radius: 8,
-            fillColor: "#64ffda",
-            color: "white",
-            weight: 3,
-            fillOpacity: 1
+            radius: 6, fillColor: "#64ffda", color: "white", weight: 2, fillOpacity: 1
         }).addTo(map);
-        
-        // Force a quick flyTo for that "Professional App" feel
-        map.flyTo(e.latlng, 16, {
-            animate: true,
-            duration: 1.5 // 1.5 seconds to zoom in from Manila view to Street view
-        });
     } else {
         window.userMarker.setLatLng(e.latlng);
     }
-    
-    document.getElementById('user-status').innerText = "Live";
 });
 
 // 7. THE VEHICLE UPDATE ENGINE (Make sure this function is defined!)
