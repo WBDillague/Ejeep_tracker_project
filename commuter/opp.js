@@ -47,22 +47,31 @@ socket.on('jeepUpdate', (data) => {
 
 // 6. THE VEHICLE ENGINE
 function updateVehicle(id, lat, lon, density) {
-    // We only declare it ONCE using a Leaflet object
-    const currentVehiclePos = L.latLng(lat, lon); 
-    
+    // 1. We create the position object just ONCE
+    const vehicleLocation = L.latLng(lat, lon); 
+
+    // 2. Add or Move the marker
     if (!jeeps[id]) {
-        jeeps[id] = L.marker(currentVehiclePos).addTo(map);
+        jeeps[id] = L.marker(vehicleLocation).addTo(map);
     } else {
-        jeeps[id].setLatLng(currentVehiclePos);
+        jeeps[id].setLatLng(vehicleLocation);
     }
 
-    let etaText = "Calculating...";
+    // 3. Distance & Arrival Logic
+    let etaInfo = "GPS Required for ETA";
     if (myLocation) {
-        const meters = myLocation.distanceTo(currentVehiclePos);
-        const km = (meters / 1000).toFixed(1);
-        const mins = Math.round((km / 15) * 60);
-        etaText = `${km} km away | ${mins < 1 ? "Arriving" : mins + " mins"}`;
+        const distMeters = myLocation.distanceTo(vehicleLocation);
+        const distKm = (distMeters / 1000).toFixed(1);
+        const arrivalMins = Math.round((distKm / 15) * 60);
+        etaInfo = `${distKm} km | ${arrivalMins < 1 ? "Arriving" : arrivalMins + " mins"}`;
     }
 
-    jeeps[id].bindPopup(`<b>${id}</b><br>Density: ${density}<br>${etaText}`);
+    // 4. Update the info window
+    jeeps[id].bindPopup(`
+        <div style="text-align:center;">
+            <b>${id}</b><br>
+            Density: ${density}<br>
+            <span style="color:blue;">${etaInfo}</span>
+        </div>
+    `);
 }
