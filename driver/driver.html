@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>E-Jeep Driver Console</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="header">
+        <h1>Driver Console</h1>
+        <p id="unit-id">Unit: MNL-001</p>
+    </div>
+
+    <div class="status-card">
+        <div class="status-indicator">
+            <span class="label">GPS STATUS</span>
+            <span id="gps-status" class="value">OFFLINE</span>
+        </div>
+        <div class="status-indicator">
+            <span class="label">LAST SYNC</span>
+            <span id="last-sent" class="value">--:--:--</span>
+        </div>
+    </div>
+
+    <label class="section-label">Select Passenger Density</label>
+    <div class="density-grid">
+        <button class="btn low active" onclick="setDensity('low', this)">LOW</button>
+        <button class="btn mid" onclick="setDensity('mid', this)">MID</button>
+        <button class="btn full" onclick="setDensity('full', this)">FULL</button>
+        <button class="btn over" onclick="setDensity('overloaded', this)">OVER</button>
+    </div>
+
+    <button id="toggle-btn" class="main-action" onclick="toggleTracking()">START DRIVING</button>
+
+    <script src="driver.js"></script>
+</body>
+</html>
