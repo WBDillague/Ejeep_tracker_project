@@ -39,7 +39,7 @@ map.on('locationfound', (e) => {
 });
 
 // 5. SERVER CONNECTION (The Radio Tower)
-const socket = io('https://ejeep-backend.onrender.com');
+const socket = io('https://ejeep-tracker-project.onrender.com');
 
 socket.on('jeepUpdate', (data) => {
     updateVehicle(data.id, data.lat, data.lon, data.density);
