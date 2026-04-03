@@ -1,17 +1,16 @@
-// 1. INITIALIZE THE MAP (THE FOUNDATION)
+// 1. Initialize with NO animation for maximum speed
 const map = L.map('map', {
     zoomControl: false,
-    fadeAnimation: true, // Makes tile loading look smoother
-    markerZoomAnimation: true
-}).setView([14.5995, 120.9842], 11); // Start zoomed out slightly for speed
+    fadeAnimation: false,   // Turn off to save CPU/Memory
+    markerZoomAnimation: false,
+    inertia: false          // Stops the map from "sliding" when you drag it
+}).setView([14.5995, 120.9842], 13); 
 
-// 2. Use a faster Tile Server (Optional but helpful)
-// OpenStreetMap is great, but sometimes 'CartoDB Positron' loads faster 
-// because it has fewer colors/details to download.
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-    attribution: '©OpenStreetMap ©CartoDB',
-    subdomains: 'abcd',
-    maxZoom: 19
+// 2. Use the standard, reliable OpenStreetMap
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    updateWhenIdle: true,  // ONLY download new tiles when you stop moving (FASTER)
+    keepBuffer: 2          // Pre-loads tiles just outside the screen
 }).addTo(map);
 
 // 2. THE TILE LAYER (THE VISUALS) - THIS IS WHAT YOU WERE MISSING
