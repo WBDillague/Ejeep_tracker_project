@@ -36,6 +36,7 @@ map.locate({ setView: true, watch: true, maxZoom: 16 });
 
 map.on('locationfound', (e) => {
     myLocation = e.latlng;
+	console.log("User location updated!");
     document.getElementById('user-status').innerText = "Live";
     
     if (!window.userMarker) {
@@ -49,7 +50,8 @@ map.on('locationfound', (e) => {
 
 // 7. THE VEHICLE UPDATE ENGINE (Make sure this function is defined!)
 function updateVehicle(id, lat, lon, density) {
-    const newPos = [lat, lon];
+    const newPos = L.latLng(lat, lon); // Create a Leaflet LatLng object
+	const newPos = [lat, lon];
     const densityConfig = {
         "low": { color: "#198754", label: "Low" },
         "mid": { color: "#fd7e14", label: "Medium" },
@@ -70,10 +72,41 @@ function updateVehicle(id, lat, lon, density) {
         }
     }
 
-    // Set the Popup Content
-    const content = `<div style="text-align:center; color:black;">
-        <b>${id}</b><br>
-        <span style="color:${config.color}">Density: ${config.label}</span>
-    </div>`;
+    // Update the Popup with a cleaner design
+    const content = `
+        <div style="text-align:center; font-family: sans-serif; color: #333;">
+            <strong style="font-size: 1.1rem;">${id}</strong><br>
+            <span style="color: #666;">Status: ${density.toUpperCase()}</span><br>
+            <hr style="margin: 5px 0; border: 0; border-top: 1px solid #eee;">
+            <span style="color: #0d6efd; font-weight: bold;">${etaText}</span>
+        </div>
+    `;
+    
     jeeps[id].bindPopup(content);
+	
+	// NEW: Calculate distance if user location is known
+    let etaText = "Enable GPS to see ETA";
+    if (myLocation) {
+        const stats = calculateETA(myLocation, newPos);
+        etaText = `<b>${stats.dist}</b> | ${stats.time}`;
+    }
+}
+
+function calculateETA(latlng1, latlng2) {
+    if (!latlng1 || !latlng2) return "Location unknown";
+
+    // 1. Get distance in meters
+    const meters = latlng1.distanceTo(latlng2);
+    
+    // 2. Convert to Kilometers
+    const km = (meters / 1000).toFixed(1);
+
+    // 3. Estimate Time (Average E-Jeep speed in Manila traffic is ~15 km/h)
+    // Formula: (Distance / Speed) * 60 minutes
+    const minutes = Math.round((km / 15) * 60);
+
+    return {
+        dist: km + " km away",
+        time: minutes < 1 ? "Arriving now" : minutes + " mins away"
+    };
 }
