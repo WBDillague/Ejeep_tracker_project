@@ -47,18 +47,18 @@ socket.on('jeepUpdate', (data) => {
 
 // 6. THE VEHICLE ENGINE
 function updateVehicle(id, lat, lon, density) {
-    const newPos = L.latLng(lat, lon);
+    // We only declare it ONCE using a Leaflet object
+    const currentVehiclePos = L.latLng(lat, lon); 
     
     if (!jeeps[id]) {
-        jeeps[id] = L.marker(newPos).addTo(map);
+        jeeps[id] = L.marker(currentVehiclePos).addTo(map);
     } else {
-        jeeps[id].setLatLng(newPos);
+        jeeps[id].setLatLng(currentVehiclePos);
     }
 
-    // Distance and ETA Logic
     let etaText = "Calculating...";
     if (myLocation) {
-        const meters = myLocation.distanceTo(newPos);
+        const meters = myLocation.distanceTo(currentVehiclePos);
         const km = (meters / 1000).toFixed(1);
         const mins = Math.round((km / 15) * 60);
         etaText = `${km} km away | ${mins < 1 ? "Arriving" : mins + " mins"}`;
