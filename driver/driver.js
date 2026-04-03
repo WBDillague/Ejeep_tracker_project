@@ -1,4 +1,4 @@
-const SERVER_URL = "http://localhost:3000/update-jeep";
+const SERVER_URL = "https://ejeep-tracker-project.onrender.com/update-jeep";
 const JEEP_ID = "MNL-EJEEP-001"; 
 
 let currentDensity = "low";

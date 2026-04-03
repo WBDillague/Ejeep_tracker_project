@@ -18,7 +18,7 @@ const jeeps = {};
 let myLocation = null;
 
 // 5. BACKEND CONNECTION (RADIO TOWER)
-const socket = io('http://localhost:3000');
+const socket = io('https://ejeep-tracker-project.onrender.com');
 
 socket.on('jeepUpdate', (data) => {
     updateVehicle(data.id, data.lat, data.lon, data.density);
