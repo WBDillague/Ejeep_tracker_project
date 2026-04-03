@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    
+    <title>E-Jeep Live</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="header">
+        <h2>E-Jeep Live Tracker</h2>
+        <p>Real-time vehicle monitoring system</p>
+    </div>
+
+    <div class="stats-container">
+        <div class="stat-item">
+            <span class="stat-label">My Status</span>
+            <span id="user-status" class="stat-value">Locating...</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">Active Jeeps</span>
+            <span id="vehicle-count" class="stat-value">0</span>
+        </div>
+    </div>
+
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-marker-sliding@0.2.0/dist/leaflet-marker-sliding.min.js"></script>
+    <script src="opp.js"></script>
+</body>
+</html>

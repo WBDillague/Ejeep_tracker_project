@@ -1,0 +1,97 @@
+:root {
+    --bg-deep-blue: #0a192f;
+    --card-cobalt: #112240;
+    --accent-sky: #64ffda;
+    --text-light-blue: #a8b2d1;
+    --white-blue: #e6f1ff;
+}
+
+/* 1. Mobile-First Reset */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 10px; /* Reduced padding for small screens */
+    background-color: var(--bg-deep-blue);
+    display: flex;
+    flex-direction: column;
+    font-family: 'Inter', sans-serif;
+    color: var(--white-blue);
+    box-sizing: border-box;
+    overflow: hidden; /* Prevents annoying bounce scrolling on mobile */
+}
+
+.header h2 { 
+    margin: 0; 
+    font-size: 1.4rem; /* Smaller for mobile */
+    letter-spacing: 0.5px; 
+}
+
+.header p { 
+    margin: 2px 0 10px 0; 
+    font-size: 0.75rem; 
+    color: var(--text-light-blue); 
+}
+
+/* 2. Responsive Stats Container */
+.stats-container {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.stat-item {
+    flex: 1;
+    background: var(--card-cobalt);
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 1px solid #233554;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.stat-label {
+    display: block;
+    font-size: 0.6rem;
+    color: var(--accent-sky);
+    text-transform: uppercase;
+    font-weight: 800;
+}
+
+.stat-value { 
+    font-size: 0.9rem; 
+    font-weight: 600; 
+}
+
+/* 3. The Map (The Hero of the Mobile UI) */
+#map {
+    width: 100%;
+    flex-grow: 1; /* Takes up all remaining space */
+    border-radius: 12px;
+    border: 1px solid #233554;
+    z-index: 1;
+	height: 500px !important; /* Force it to 500px height */
+    min-height: 500px;
+    background-color: #0d1b2a; /* A slightly different blue to see it */
+}
+
+/* 4. Mobile Popup Adjustments */
+.leaflet-popup-content-wrapper {
+    background: var(--card-cobalt);
+    color: var(--white-blue);
+    border: 1px solid var(--accent-sky);
+    border-radius: 10px;
+    font-size: 14px; /* Larger text for fingers to read easily */
+}
+
+/* 5. Custom Mobile "Locate Me" Button logic */
+/* We'll add this via JS, but here is the style */
+.leaflet-control-attribution {
+    font-size: 8px !important; /* Hide bulky attribution on small screens */
+}
+
+/* Media Query for PC/Tablets */
+@media (min-width: 768px) {
+    body { padding: 20px; }
+    .header h2 { font-size: 2rem; }
+    .stat-item { padding: 15px; }
+    .stat-value { font-size: 1.2rem; }
+}
